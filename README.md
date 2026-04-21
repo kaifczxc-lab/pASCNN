@@ -109,7 +109,23 @@ How the core is structured
 
 If we remove all the noise, the core's mental model is as follows:
 
-- there are 5 internal roles: L, R, -1, 0, +1
+- there are 5 internal roles: **L, R, -1, 0, +1**
+
+### <div align="center">Visualizing</div>
+
+---
+
+<img width="1280" height="720" alt="lsosmfjdhfdh" src="https://github.com/user-attachments/assets/d8b9434f-3854-42ce-8569-141507881432" />
+
+---
+
+This figure shows the fixed internal topology of the pASCNN core
+
+L and R form the wave edge, -1, 0, and +1 form the logic subgraph, and the remaining red edges are cross-connections between the wave and logical parts
+
+The readout is taken from the updated logical state and is not itself a graph vertex
+
+---
 
 - between them are fixed typed edges: logic / wave / cross
 
@@ -316,6 +332,8 @@ Explanation
 - linear_state says: "Give me the raw state, I'll figure it out myself."
 
 - codebook says: "Each class already has ready-made code, I'll check which code the output most closely resembles."
+
+We can literally see this in code
 
 ---
 
