@@ -7,9 +7,9 @@ My work is not SOTA, this arch is extremely new, but it produces results consist
 
 I also don't deny that similar work may have been done, but I personally haven't seen architectures with the makings of p-adic structures and bundles, along with a ternary readout system in the form of a codebook (which can currently compete with others in only one of three tests conducted).
 
-short description about technology
+Here the description about technology
 
-Part 0 | Classification:
+### Part 0 | Classification:
 
 Let's introduce some specifics for further understanding, so we can distinguish between reality and implementation.
 
@@ -19,9 +19,9 @@ What are these? These are different readout variants from the core, running on t
 
 The mathematics isn't the most rigorous, I tried to convey this in the title
 
-Regarding p-adic, if we take the academic definition of these data structures, then compared to pASCNN, we get the following verdict:
+Regarding p-adic, if we take the [academic definition of p-adic numbers](https://en.wikipedia.org/wiki/P-adic_number), then compared to pASCNN, we get the following verdict:
 
-no Q_s, no infinite expansions, no true norm
+no Q_p, no infinite expansions, no true norm
 
 Why? Doing this on a regular PyTorch, on a regular GPU -> a road to nowhere
 
@@ -31,13 +31,13 @@ It's a rather complex name, but it makes sense due to the prefixes used in the a
 
 These ideas are similar to the basic idea of ​​p-adic data structures and are suitable for constructing trees. Therefore, in what follows, I will argue that this is a minimal p-adic representation in the context of neural network architectures. When I speak of p-adic, I will mean exactly this
 
-Regarding sheaf, if we take the academic definition of sheaf theory, then in comparison with pASCNN, we get the following verdict:
+Regarding sheaf, if we take the [academic definition of sheaf theory](https://stacks.math.columbia.edu/tag/00VL), then in comparison with pASCNN, we get the following verdict:
 
 No sheaf objects, no gluing axioms, no functors
 
 If we refer to papers on sheaf neural networks, then
 
-In papers on Neural Sheaf Diffusion and related SNN papers, cellular sheaf on a graph is defined as follows: each node and edge is associated with a vector space, and each The incident node-edge pair is a linear mapping F_v◃e​:F(v)→F(e)), called a restriction map. This is precisely the level of definition used in ML works.
+In papers on [Neural Sheaf Diffusion](https://arxiv.org/abs/2202.04579) and related SNN papers, cellular sheaf on a graph is defined as follows: each node and edge is associated with a vector space, and each The incident node-edge pair is a linear mapping F_v◃e​:F(v)→F(e)), called a restriction map. This is precisely the level of definition used in ML works.
 
 What does pASCNN actually contain from sheaf theory, and why does the architecture qualify for the name sheaf-coherence, but with a caveat (see below):
 
@@ -53,3 +53,15 @@ The most correct formulation (clause) would be:
 pASCNN contains an explicit cellular-sheaf-style transport/consistency mechanism on a fixed graph cell
 
 From now on, when I talk about sheaf, I will mean exactly this definition, and you should understand it
+
+
+
+
+
+## Resources:
+
+The applications of sheaf theory in deep learning, data science, and computer science in general: https://arxiv.org/abs/2502.15476
+
+Academic Sheaf Theory definition: https://stacks.math.columbia.edu/tag/00VL
+
+Academic P-adic numbers definition: https://mathworld.wolfram.com/p-adicNumber.html or if needed more info https://en.wikipedia.org/wiki/P-adic_number
