@@ -131,7 +131,7 @@ If we remove all the noise, the core's mental model is as follows:
 
 In other words, the core is a small typed complex graph machine, not attention-over-patches.
 
-## Part 3 | Two main readout methods
+## Part 2 | Two main readout methods
 
 As you read above, there are 2 different readouts in pASCNN (or 2 different readout branches), one of them is standard and the other is not quite
 
@@ -189,7 +189,7 @@ How should this be understood?
 - if the logical structure within the core is well-formed, this is a strong option
 - if it is not, this decoder becomes a bottleneck
 
-## Part 3.1 | Summary
+## Part 2.1 | Summary
 
 In that summary i want to say about "Everything generally depends on testing", what this mean?
 
@@ -305,6 +305,20 @@ probabilities cleaner
 - Yes. That's essentially the main factor
 - MNIST and some relational modes are more like problems where discrete bottlenecks can work
 - CIFAR and frozen-state probe are currently stronger in favor of linear_state
+
+Funny note:
+
+Why are codebook and linear_state called that way?
+There's one real reason for this.
+
+Explanation
+
+- linear_state says: "Give me the raw state, I'll figure it out myself."
+
+- codebook says: "Each class already has ready-made code, I'll check which code the output most closely resembles."
+
+---
+
 
 ## Resources:
 
