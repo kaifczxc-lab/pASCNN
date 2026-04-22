@@ -1,0 +1,461 @@
+{
+  "budgets_per_class": [
+    50,
+    500,
+    1000
+  ],
+  "epochs": 10,
+  "runs": [
+    {
+      "aggregate": {
+        "codebook": {
+          "best_test_accuracy_mean": 0.16333333333333333,
+          "best_test_accuracy_std": 0.007942501704962562,
+          "final_test_accuracy_mean": 0.1445,
+          "final_test_accuracy_std": 0.013313526955694346,
+          "final_test_loss_mean": 2.2791477781931557,
+          "final_test_loss_std": 0.023557539048880922
+        },
+        "linear_state": {
+          "best_test_accuracy_mean": 0.226,
+          "best_test_accuracy_std": 0.018357559750685825,
+          "final_test_accuracy_mean": 0.226,
+          "final_test_accuracy_std": 0.018357559750685825,
+          "final_test_loss_mean": 2.088013072649638,
+          "final_test_loss_std": 0.034560182724405995
+        },
+        "transformer": {
+          "best_test_accuracy_mean": 0.19549999999999998,
+          "best_test_accuracy_std": 0.019157244060668016,
+          "final_test_accuracy_mean": 0.191,
+          "final_test_accuracy_std": 0.0269211812519436,
+          "final_test_loss_mean": 2.17593279393514,
+          "final_test_loss_std": 0.046096932611745925
+        }
+      },
+      "budget_per_class": 50,
+      "seed_runs": [
+        {
+          "codebook": {
+            "best_epoch": 7,
+            "best_test_accuracy": 0.159,
+            "final_edge_amplitude_mean": 0.6163022071123123,
+            "final_edge_defect_norm_sq_normalized_mean": 0.08377166371792555,
+            "final_edge_prefix_ratio": 0.9923254325985909,
+            "final_test_accuracy": 0.143,
+            "final_test_loss": 2.26337215423584,
+            "final_wave_prefix_ratio": 0.9176957458257675,
+            "parameter_count": 86563,
+            "runtime_seconds": 13.982085899915546
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.239,
+            "final_edge_amplitude_mean": 0.6935291886329651,
+            "final_edge_defect_norm_sq_normalized_mean": 0.11424438934773207,
+            "final_edge_prefix_ratio": 1.0856637805700302,
+            "final_test_accuracy": 0.239,
+            "final_test_loss": 2.060576259613037,
+            "final_wave_prefix_ratio": 1.0095588117837906,
+            "parameter_count": 87533,
+            "runtime_seconds": 13.66679669986479
+          },
+          "seed": 7,
+          "transformer": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.2045,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.2045,
+            "final_test_loss": 2.175497247695923,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 6.8600847001653165
+          }
+        },
+        {
+          "codebook": {
+            "best_epoch": 8,
+            "best_test_accuracy": 0.1585,
+            "final_edge_amplitude_mean": 0.6318519562482834,
+            "final_edge_defect_norm_sq_normalized_mean": 0.08350084815174341,
+            "final_edge_prefix_ratio": 1.0162010788917542,
+            "final_test_accuracy": 0.1585,
+            "final_test_loss": 2.2678443183898924,
+            "final_wave_prefix_ratio": 0.9861502274870872,
+            "parameter_count": 86563,
+            "runtime_seconds": 13.87744430010207
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.234,
+            "final_edge_amplitude_mean": 0.685378685593605,
+            "final_edge_defect_norm_sq_normalized_mean": 0.09914475679397583,
+            "final_edge_prefix_ratio": 1.0742871165275574,
+            "final_test_accuracy": 0.234,
+            "final_test_loss": 2.076635220527649,
+            "final_wave_prefix_ratio": 1.148622676730156,
+            "parameter_count": 87533,
+            "runtime_seconds": 14.076104899868369
+          },
+          "seed": 11,
+          "transformer": {
+            "best_epoch": 8,
+            "best_test_accuracy": 0.1735,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.16,
+            "final_test_loss": 2.2222459564208985,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 7.071406000060961
+          }
+        },
+        {
+          "codebook": {
+            "best_epoch": 8,
+            "best_test_accuracy": 0.1725,
+            "final_edge_amplitude_mean": 0.5745575129985809,
+            "final_edge_defect_norm_sq_normalized_mean": 0.11912258900702,
+            "final_edge_prefix_ratio": 0.9309446737170219,
+            "final_test_accuracy": 0.132,
+            "final_test_loss": 2.306226861953735,
+            "final_wave_prefix_ratio": 0.9847780838608742,
+            "parameter_count": 86563,
+            "runtime_seconds": 13.87665280001238
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.205,
+            "final_edge_amplitude_mean": 0.6838114783167839,
+            "final_edge_defect_norm_sq_normalized_mean": 0.11556154955178499,
+            "final_edge_prefix_ratio": 1.1841274052858353,
+            "final_test_accuracy": 0.205,
+            "final_test_loss": 2.1268277378082274,
+            "final_wave_prefix_ratio": 1.2351926416158676,
+            "parameter_count": 87533,
+            "runtime_seconds": 13.560136400163174
+          },
+          "seed": 19,
+          "transformer": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.2085,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.2085,
+            "final_test_loss": 2.1300551776885985,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 7.189267399953678
+          }
+        }
+      ]
+    },
+    {
+      "aggregate": {
+        "codebook": {
+          "best_test_accuracy_mean": 0.3115,
+          "best_test_accuracy_std": 0.002179449471770339,
+          "final_test_accuracy_mean": 0.30566666666666664,
+          "final_test_accuracy_std": 0.012271240089466656,
+          "final_test_loss_mean": 1.9090443964004515,
+          "final_test_loss_std": 0.029291586820692314
+        },
+        "linear_state": {
+          "best_test_accuracy_mean": 0.377,
+          "best_test_accuracy_std": 0.0010000000000000009,
+          "final_test_accuracy_mean": 0.37583333333333335,
+          "final_test_accuracy_std": 0.0012583057392117928,
+          "final_test_loss_mean": 1.6578029378255208,
+          "final_test_loss_std": 0.022241192744465482
+        },
+        "transformer": {
+          "best_test_accuracy_mean": 0.38283333333333336,
+          "best_test_accuracy_std": 0.014250730975403813,
+          "final_test_accuracy_mean": 0.3795,
+          "final_test_accuracy_std": 0.019487175269905094,
+          "final_test_loss_mean": 1.6850485649108886,
+          "final_test_loss_std": 0.04365270760321197
+        }
+      },
+      "budget_per_class": 500,
+      "seed_runs": [
+        {
+          "codebook": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.313,
+            "final_edge_amplitude_mean": 0.6469638347625732,
+            "final_edge_defect_norm_sq_normalized_mean": 0.11549561563879251,
+            "final_edge_prefix_ratio": 1.0123843848705292,
+            "final_test_accuracy": 0.313,
+            "final_test_loss": 1.9272815446853637,
+            "final_wave_prefix_ratio": 0.9697917103767395,
+            "parameter_count": 86563,
+            "runtime_seconds": 50.768190699862316
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.377,
+            "final_edge_amplitude_mean": 0.8853374868631363,
+            "final_edge_defect_norm_sq_normalized_mean": 0.1535987015813589,
+            "final_edge_prefix_ratio": 1.980323538184166,
+            "final_test_accuracy": 0.377,
+            "final_test_loss": 1.6792440662384034,
+            "final_wave_prefix_ratio": 1.9829061478376389,
+            "parameter_count": 87533,
+            "runtime_seconds": 50.13065840001218
+          },
+          "seed": 7,
+          "transformer": {
+            "best_epoch": 9,
+            "best_test_accuracy": 0.3685,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.3585,
+            "final_test_loss": 1.7330286722183228,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 16.577282499987632
+          }
+        },
+        {
+          "codebook": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.3125,
+            "final_edge_amplitude_mean": 0.6970721259713173,
+            "final_edge_defect_norm_sq_normalized_mean": 0.12996936962008476,
+            "final_edge_prefix_ratio": 1.0127396434545517,
+            "final_test_accuracy": 0.3125,
+            "final_test_loss": 1.875256978034973,
+            "final_wave_prefix_ratio": 1.372645154595375,
+            "parameter_count": 86563,
+            "runtime_seconds": 49.701609700219706
+          },
+          "linear_state": {
+            "best_epoch": 9,
+            "best_test_accuracy": 0.378,
+            "final_edge_amplitude_mean": 0.8635394796729088,
+            "final_edge_defect_norm_sq_normalized_mean": 0.17186721041798592,
+            "final_edge_prefix_ratio": 1.9121458381414413,
+            "final_test_accuracy": 0.3745,
+            "final_test_loss": 1.65932488822937,
+            "final_wave_prefix_ratio": 1.9200955033302307,
+            "parameter_count": 87533,
+            "runtime_seconds": 49.540362499887124
+          },
+          "seed": 11,
+          "transformer": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.383,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.383,
+            "final_test_loss": 1.6744372577667237,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 16.059156799921766
+          }
+        },
+        {
+          "codebook": {
+            "best_epoch": 9,
+            "best_test_accuracy": 0.309,
+            "final_edge_amplitude_mean": 0.511092409491539,
+            "final_edge_defect_norm_sq_normalized_mean": 0.15777397900819778,
+            "final_edge_prefix_ratio": 0.9571202769875526,
+            "final_test_accuracy": 0.2915,
+            "final_test_loss": 1.924594666481018,
+            "final_wave_prefix_ratio": 1.0707311034202576,
+            "parameter_count": 86563,
+            "runtime_seconds": 48.81368469982408
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.376,
+            "final_edge_amplitude_mean": 0.8765182495117188,
+            "final_edge_defect_norm_sq_normalized_mean": 0.15208078920841217,
+            "final_edge_prefix_ratio": 1.9775256216526031,
+            "final_test_accuracy": 0.376,
+            "final_test_loss": 1.6348398590087891,
+            "final_wave_prefix_ratio": 1.9716033041477203,
+            "parameter_count": 87533,
+            "runtime_seconds": 49.1446940000169
+          },
+          "seed": 19,
+          "transformer": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.397,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.397,
+            "final_test_loss": 1.6476797647476196,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 16.11753759998828
+          }
+        }
+      ]
+    },
+    {
+      "aggregate": {
+        "codebook": {
+          "best_test_accuracy_mean": 0.403,
+          "best_test_accuracy_std": 0.012318684994754903,
+          "final_test_accuracy_mean": 0.39816666666666667,
+          "final_test_accuracy_std": 0.020256686138984657,
+          "final_test_loss_mean": 1.666165630340576,
+          "final_test_loss_std": 0.04698228494910315
+        },
+        "linear_state": {
+          "best_test_accuracy_mean": 0.4565,
+          "best_test_accuracy_std": 0.005894913061275803,
+          "final_test_accuracy_mean": 0.4565,
+          "final_test_accuracy_std": 0.005894913061275803,
+          "final_test_loss_mean": 1.4695695209503175,
+          "final_test_loss_std": 0.023852378234857825
+        },
+        "transformer": {
+          "best_test_accuracy_mean": 0.46066666666666667,
+          "best_test_accuracy_std": 0.0027537852736430534,
+          "final_test_accuracy_mean": 0.45333333333333337,
+          "final_test_accuracy_std": 0.010323920443965729,
+          "final_test_loss_mean": 1.5003402287165324,
+          "final_test_loss_std": 0.015595590656310814
+        }
+      },
+      "budget_per_class": 1000,
+      "seed_runs": [
+        {
+          "codebook": {
+            "best_epoch": 9,
+            "best_test_accuracy": 0.39,
+            "final_edge_amplitude_mean": 0.592516116797924,
+            "final_edge_defect_norm_sq_normalized_mean": 0.13280563056468964,
+            "final_edge_prefix_ratio": 1.0028106570243835,
+            "final_test_accuracy": 0.3755,
+            "final_test_loss": 1.7202018365859986,
+            "final_wave_prefix_ratio": 1.0128677487373352,
+            "parameter_count": 86563,
+            "runtime_seconds": 90.2032772002276
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.458,
+            "final_edge_amplitude_mean": 0.9038672894239426,
+            "final_edge_defect_norm_sq_normalized_mean": 0.18214038014411926,
+            "final_edge_prefix_ratio": 1.861089363694191,
+            "final_test_accuracy": 0.458,
+            "final_test_loss": 1.4847301588058472,
+            "final_wave_prefix_ratio": 1.7902729213237762,
+            "parameter_count": 87533,
+            "runtime_seconds": 89.30453269998543
+          },
+          "seed": 7,
+          "transformer": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.4605,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.4605,
+            "final_test_loss": 1.4911066398620605,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 26.5396074000746
+          }
+        },
+        {
+          "codebook": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.4045,
+            "final_edge_amplitude_mean": 0.683871403336525,
+            "final_edge_defect_norm_sq_normalized_mean": 0.15798000618815422,
+            "final_edge_prefix_ratio": 1.0101758614182472,
+            "final_test_accuracy": 0.4045,
+            "final_test_loss": 1.6349760274887084,
+            "final_wave_prefix_ratio": 1.3376174867153168,
+            "parameter_count": 86563,
+            "runtime_seconds": 89.22568870009854
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.4615,
+            "final_edge_amplitude_mean": 0.8729423359036446,
+            "final_edge_defect_norm_sq_normalized_mean": 0.21250790171325207,
+            "final_edge_prefix_ratio": 2.0193424373865128,
+            "final_test_accuracy": 0.4615,
+            "final_test_loss": 1.4420755825042724,
+            "final_wave_prefix_ratio": 2.022551402449608,
+            "parameter_count": 87533,
+            "runtime_seconds": 90.00219199992716
+          },
+          "seed": 11,
+          "transformer": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.458,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.458,
+            "final_test_loss": 1.4915675468444825,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 26.418813900090754
+          }
+        },
+        {
+          "codebook": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.4145,
+            "final_edge_amplitude_mean": 0.49080033227801323,
+            "final_edge_defect_norm_sq_normalized_mean": 0.16044512577354908,
+            "final_edge_prefix_ratio": 0.9931149333715439,
+            "final_test_accuracy": 0.4145,
+            "final_test_loss": 1.6433190269470215,
+            "final_wave_prefix_ratio": 1.088928334414959,
+            "parameter_count": 86563,
+            "runtime_seconds": 90.84210489992984
+          },
+          "linear_state": {
+            "best_epoch": 10,
+            "best_test_accuracy": 0.45,
+            "final_edge_amplitude_mean": 0.8882176801562309,
+            "final_edge_defect_norm_sq_normalized_mean": 0.1821017488837242,
+            "final_edge_prefix_ratio": 1.9579726606607437,
+            "final_test_accuracy": 0.45,
+            "final_test_loss": 1.4819028215408325,
+            "final_wave_prefix_ratio": 1.931343525648117,
+            "parameter_count": 87533,
+            "runtime_seconds": 90.71649760007858
+          },
+          "seed": 19,
+          "transformer": {
+            "best_epoch": 9,
+            "best_test_accuracy": 0.4635,
+            "final_edge_amplitude_mean": null,
+            "final_edge_defect_norm_sq_normalized_mean": null,
+            "final_edge_prefix_ratio": null,
+            "final_test_accuracy": 0.4415,
+            "final_test_loss": 1.5183464994430542,
+            "final_wave_prefix_ratio": null,
+            "parameter_count": 75082,
+            "runtime_seconds": 28.035195800010115
+          }
+        }
+      ]
+    }
+  ],
+  "seeds": [
+    7,
+    11,
+    19
+  ],
+  "test_per_class": 200,
+  "val_per_class": 200
+}

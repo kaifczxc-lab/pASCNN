@@ -1,0 +1,58 @@
+{
+  "benchmark_report_path": "C:\\Users\\user\\Desktop\\Serenade_Lang_Dev\\libQITNN\\pASCNN\\.test_artifacts\\step48_left_right_relation_leakage_audit_seed8_2026-04-20\\benchmark\\left_right_relation_benchmark.json",
+  "chance_accuracy": 0.25,
+  "codebook_result": {
+    "broken_pair_test_ood_accuracy": 0.255,
+    "checkpoint_selected_test_iid_accuracy": 0.764,
+    "checkpoint_selected_test_ood_accuracy": 0.754,
+    "checkpoint_selected_val_ood_accuracy": 0.728,
+    "csv_selected_test_iid_accuracy": 0.764,
+    "csv_selected_test_ood_accuracy": 0.754,
+    "csv_selected_val_ood_accuracy": 0.728,
+    "json_selected_test_iid_accuracy": 0.764,
+    "json_selected_test_ood_accuracy": 0.754,
+    "json_selected_val_ood_accuracy": 0.728,
+    "left_only_test_ood_accuracy": 0.26,
+    "name": "pascnn_relation_codebook_classifier",
+    "right_only_test_ood_accuracy": 0.226
+  },
+  "duplicate_hash_counts": {
+    "test_iid_test_ood": 0,
+    "train_test_iid": 0,
+    "train_test_ood": 0,
+    "train_val": 0,
+    "train_val_ood": 0,
+    "val_ood_test_ood": 0
+  },
+  "linear_state_result": {
+    "broken_pair_test_ood_accuracy": 0.247,
+    "checkpoint_selected_test_iid_accuracy": 0.771,
+    "checkpoint_selected_test_ood_accuracy": 0.752,
+    "checkpoint_selected_val_ood_accuracy": 0.711,
+    "csv_selected_test_iid_accuracy": 0.771,
+    "csv_selected_test_ood_accuracy": 0.752,
+    "csv_selected_val_ood_accuracy": 0.711,
+    "json_selected_test_iid_accuracy": 0.771,
+    "json_selected_test_ood_accuracy": 0.752,
+    "json_selected_val_ood_accuracy": 0.711,
+    "left_only_test_ood_accuracy": 0.24,
+    "name": "pascnn_relation_linear_state_classifier",
+    "right_only_test_ood_accuracy": 0.221
+  },
+  "report_path": "C:\\Users\\user\\Desktop\\Serenade_Lang_Dev\\libQITNN\\pASCNN\\.test_artifacts\\step48_left_right_relation_leakage_audit_seed8_2026-04-20\\left_right_relation_leakage_audit.json",
+  "transformer_result": {
+    "broken_pair_test_ood_accuracy": 0.247,
+    "checkpoint_selected_test_iid_accuracy": 0.779,
+    "checkpoint_selected_test_ood_accuracy": 0.745,
+    "checkpoint_selected_val_ood_accuracy": 0.723,
+    "csv_selected_test_iid_accuracy": 0.779,
+    "csv_selected_test_ood_accuracy": 0.745,
+    "csv_selected_val_ood_accuracy": 0.723,
+    "json_selected_test_iid_accuracy": 0.779,
+    "json_selected_test_ood_accuracy": 0.745,
+    "json_selected_val_ood_accuracy": 0.723,
+    "left_only_test_ood_accuracy": 0.242,
+    "name": "transformer_relation_classifier",
+    "right_only_test_ood_accuracy": 0.23
+  }
+}
