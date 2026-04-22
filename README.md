@@ -90,51 +90,51 @@ Instead of a regular linear classifier on top of the encoder embedding, pASCNN h
 
 $$s_{b,v,d}=\frac{W_{re}(h)_{b,v,d}+i\,W_{im}(h)_{b,v,d}}{\sqrt{D}}$$
 
-  confirmed by core/cell.py:103-119
+  confirmed by [core/cell.py:103-119](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L103-L119)
 
 - builds finite-depth branch-code logits and branch probabilities
 
-  Code: core/cell.py:121-127 -> return self.branch_logits_init(h).reshape(batch_size, self.config.num_vertices, self.config.branch_depth, self.config.branch_base)
+  Code: [core/cell.py:121-127](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L121-L127) -> return self.branch_logits_init(h).reshape(batch_size, self.config.num_vertices, self.config.branch_depth, self.config.branch_base)
 
-  and core/cell.py:200 -> digit_probabilities = torch.softmax(digit_logits, dim=-1)
+  and [core/cell.py:200](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L200) -> digit_probabilities = torch.softmax(digit_logits, dim=-1)
 
 - calculates prefix matching between branch codes on edges — let q^(s), q^(t) = source/target digit probabilities;
 
 $$a_{b,e,k}=\sum_p q^{(s)}_{b,e,k,p}q^{(t)}_{b,e,k,p},\;\;c_{b,e,k}=\prod_{j\le k}a_{b,e,j},\;\;m_{b,e}=\sum_k c_{b,e,k}$$
 
-  confirmed by ops/reference.py:266-268
+  confirmed by [ops/reference.py:266-268](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L266-L268)
 
 - calculates typed transport defects between vertex states
 
-  Code: ops/reference.py:317-320 -> source_transport = selected_source_diagonal * source ; target_transport = selected_target_diagonal * target ; defect = source_transport - target_transport ; defect_norm_sq = defect.abs().square().sum(dim=-1)
+  Code: [ops/reference.py:317-320](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L317-L320) -> source_transport = selected_source_diagonal * source ; target_transport = selected_target_diagonal * target ; defect = source_transport - target_transport ; defect_norm_sq = defect.abs().square().sum(dim=-1)
 
 - calculates coherence amplitude and phase — let m = prefix depth; δ = defect norm; t = edge type;
 
 $$\phi_{b,e}=b_t+\gamma_t\,m_{b,e},\;\;A_{b,e}=\sigma\!\big(\alpha_t(m_{b,e}-\tau_t)\big)\exp(-|\beta_t|\,\delta_{b,e})$$
 
-  confirmed by ops/reference.py:396-399
+  confirmed by [ops/reference.py:396-399](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L396-L399)
 
 - builds complex edge messages
 
-  Code: ops/reference.py:400-403 -> edge_coefficient = torch.polar(edge_amplitude, edge_phase) ; edge_message = edge_mean * edge_coefficient.unsqueeze(-1)
+  Code: [ops/reference.py:400-403](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L400-L403) -> edge_coefficient = torch.polar(edge_amplitude, edge_phase) ; edge_message = edge_mean * edge_coefficient.unsqueeze(-1)
 
 - scatters them back to vertices
 
-  Code: core/cell.py:237-243 -> vertex_message_sum = complex_scatter_add(edge_messages=coherence.edge_message, incidence_index=self.incidence_index, num_vertices=self.config.num_vertices, backend=op_backend)
+  Code: [core/cell.py:237-243](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L237-L243) -> vertex_message_sum = complex_scatter_add(edge_messages=coherence.edge_message, incidence_index=self.incidence_index, num_vertices=self.config.num_vertices, backend=op_backend)
 
 - updates vertex states
 
-  Code: core/cell.py:245-246 -> self_update = self.self_diagonal.unsqueeze(0) * vertex_state ; vertex_state = self_update + vertex_message_sum
+  Code: [core/cell.py:245-246](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L245-L246) -> self_update = self.self_diagonal.unsqueeze(0) * vertex_state ; vertex_state = self_update + vertex_message_sum
 
 - then returns either Born/codebook readout or logical states to the linear head
 
-  Code: core/cell.py:254 -> readout = self.readout(vertex_state)
+  Code: [core/cell.py:254](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L254) -> readout = self.readout(vertex_state)
 
-  training/cifar10_benchmark.py:397-402 -> class_log_scores = torch.gather(...).squeeze(-1).sum(dim=-1)
+  [training/cifar10_benchmark.py:397-402](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/training/cifar10_benchmark.py#L397-L402) -> class_log_scores = torch.gather(...).squeeze(-1).sum(dim=-1)
 
-  training/cifar10_benchmark.py:476-484 -> logical_vertex_state = cell_outputs.vertex_state[:, LOGIC_VERTEX_INDICES, :] ; class_log_scores = self.classifier(state_features)
+  [training/cifar10_benchmark.py:476-484](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/training/cifar10_benchmark.py#L476-L484) -> logical_vertex_state = cell_outputs.vertex_state[:, LOGIC_VERTEX_INDICES, :] ; class_log_scores = self.classifier(state_features)
 
-All this can be seen and examined in core/cell.py & types.py & ops/reference.py
+All this can be seen and examined in [core/cell.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py) & [types.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/types.py) & [ops/reference.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py)
 
 How the core is structured
 
@@ -142,7 +142,7 @@ If we remove all the noise, the core's mental model is as follows:
 
 - there are 5 internal roles: L, R, -1, 0, +1
 
-  Code: types.py:15 -> VERTEX_LABELS = ("L", "R", "-1", "0", "+1")
+  Code: [types.py:15](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/types.py#L15) -> VERTEX_LABELS = ("L", "R", "-1", "0", "+1")
 
 ### <div align="center">Visualizing</div>
 
@@ -156,19 +156,19 @@ This figure shows the fixed internal topology of the pASCNN core
 
 L and R form the wave edge, -1, 0, and +1 form the logic subgraph, and the remaining red edges are cross-connections between the wave and logical parts
 
-Code: types.py:38-54 -> EDGE_ENDPOINTS = (...) ; EDGE_TYPES = ("logic", "logic", "logic", "wave", "cross", ...)
+Code: [types.py:38-54](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/types.py#L38-L54) -> EDGE_ENDPOINTS = (...) ; EDGE_TYPES = ("logic", "logic", "logic", "wave", "cross", ...)
 
 The readout is taken from the updated logical state and is not itself a graph vertex
 
-Code: types.py:29-32 -> LOGIC_VERTEX_INDICES = (VERTEX_INDEX["-1"], VERTEX_INDEX["0"], VERTEX_INDEX["+1"])
+Code: [types.py:29-32](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/types.py#L29-L32) -> LOGIC_VERTEX_INDICES = (VERTEX_INDEX["-1"], VERTEX_INDEX["0"], VERTEX_INDEX["+1"])
 
-and core/readout.py:40-49 -> logic_amplitudes ... logic_probabilities = logic_energy / normalization
+and [core/readout.py:40-49](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/readout.py#L40-L49) -> logic_amplitudes ... logic_probabilities = logic_energy / normalization
 
 ---
 
 - between them are fixed typed edges: logic / wave / cross
 
-  Code: types.py:50-64 -> EDGE_TYPES = (...) ; CANONICAL_EDGE_TYPE_INDEX = tuple(EDGE_TYPE_INDEX[edge_type] for edge_type in EDGE_TYPES)
+  Code: [types.py:50-64](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/types.py#L50-L64) -> EDGE_TYPES = (...) ; CANONICAL_EDGE_TYPE_INDEX = tuple(EDGE_TYPE_INDEX[edge_type] for edge_type in EDGE_TYPES)
 
 - each vertex has a complex state — let h = encoder embedding; D = hidden dim;
 
@@ -176,39 +176,39 @@ $$
 s_{b,v,d}=\frac{W_{re}(h)_{b,v,d}+i\,W_{im}(h)_{b,v,d}}{\sqrt{D}}
 $$
 
-  confirmed by core/cell.py:103-119
+  confirmed by [core/cell.py:103-119](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L103-L119)
 
 - each vertex has a finite-depth branch code
 
-  Code: core/cell.py:121-127 -> branch_logits_init(h).reshape(batch_size, self.config.num_vertices, self.config.branch_depth, self.config.branch_base)
+  Code: [core/cell.py:121-127](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L121-L127) -> branch_logits_init(h).reshape(batch_size, self.config.num_vertices, self.config.branch_depth, self.config.branch_base)
 
-  and core/cell.py:200 -> digit_probabilities = torch.softmax(digit_logits, dim=-1)
+  and [core/cell.py:200](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L200) -> digit_probabilities = torch.softmax(digit_logits, dim=-1)
 
 - branch codes are compared via soft prefix similarity — let q^(s), q^(t) = source/target digit probabilities;
 
 $$a_{b,e,k}=\sum_p q^{(s)}_{b,e,k,p}q^{(t)}_{b,e,k,p},\;\;c_{b,e,k}=\prod_{j\le k}a_{b,e,j},\;\;m_{b,e}=\sum_k c_{b,e,k}$$
 
-  confirmed by ops/reference.py:266-268
+  confirmed by [ops/reference.py:266-268](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L266-L268)
 
 - complex states are compared via a typed transport defect
 
-  Code: ops/reference.py:317-320 -> source_transport = selected_source_diagonal * source ; target_transport = selected_target_diagonal * target ; defect = source_transport - target_transport ; defect_norm_sq = defect.abs().square().sum(dim=-1)
+  Code: [ops/reference.py:317-320](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L317-L320) -> source_transport = selected_source_diagonal * source ; target_transport = selected_target_diagonal * target ; defect = source_transport - target_transport ; defect_norm_sq = defect.abs().square().sum(dim=-1)
 
 - the prefix and defect together control the coherence gate
 
-  Test: .test_artifacts/step39_cifar10_20epoch_compare_2026-04-19/cifar10_benchmark.json logs edge_prefix_depth_to_uniform_ratio_mean, edge_defect_norm_sq_normalized_mean, and edge_amplitude_mean in the same run
+  Test: [test_artifacts/cifar10_20epoch_compare/cifar10_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/cifar10_20epoch_compare/cifar10_benchmark.json) logs edge_prefix_depth_to_uniform_ratio_mean, edge_defect_norm_sq_normalized_mean, and edge_amplitude_mean in the same run
 
 - the coherence gate sets the complex edge message
 
-  Code: ops/reference.py:396-403 -> edge_phase = ... ; edge_amplitude = ... ; edge_coefficient = torch.polar(edge_amplitude, edge_phase) ; edge_message = edge_mean * edge_coefficient.unsqueeze(-1)
+  Code: [ops/reference.py:396-403](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L396-L403) -> edge_phase = ... ; edge_amplitude = ... ; edge_coefficient = torch.polar(edge_amplitude, edge_phase) ; edge_message = edge_mean * edge_coefficient.unsqueeze(-1)
 
 - edge messages update vertex states
 
-  Code: core/cell.py:238-246 -> vertex_message_sum = complex_scatter_add(...) ; self_update = self.self_diagonal.unsqueeze(0) * vertex_state ; vertex_state = self_update + vertex_message_sum
+  Code: [core/cell.py:238-246](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/core/cell.py#L238-L246) -> vertex_message_sum = complex_scatter_add(...) ; self_update = self.self_diagonal.unsqueeze(0) * vertex_state ; vertex_state = self_update + vertex_message_sum
 
 - the decision is then read from the logical part of this state
 
-  Test: .test_artifacts/step25_frozen_cell_readout_sweep_2026-04-18/frozen_cell_readout_sweep_summary.json compares a0_source_pascnn_codebook vs a3_linear_state_head, i.e. the two readout paths on the same core-state family
+  Test: [test_artifacts/frozen_cell_readout_sweep/frozen_cell_readout_sweep_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/frozen_cell_readout_sweep/frozen_cell_readout_sweep_summary.json) compares a0_source_pascnn_codebook vs a3_linear_state_head, i.e. the two readout paths on the same core-state family
 
 In other words, the core is a small typed complex graph machine, not attention-over-patches.
 
@@ -337,16 +337,14 @@ On CIFAR-10, the picture so far favors linear_state.
 
 - linear_state: best 52.75%
 - codebook: best 48.95%
-Artifact: .test_artifacts/
-step39_cifar10_20epoch_compare_2026-04-19/cifar10_benchmark.json
+Artifact: [test_artifacts/cifar10_20epoch_compare/cifar10_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/cifar10_20epoch_compare/cifar10_benchmark.json)
 
 And on the low-data sweep, linear_state is also systematically higher than codebook at all budgets, although not always higher than transformer:
 
 - 50/class: 22.6% vs. 16.3%
 - 500/class: 37.7% vs. 31.15%
 - 1000/class: 45.65% vs. 40.3%
-Artifact: .test_artifacts/
-step41_cifar10_lowdata_3seed_selected_2026-04-19/lowdata_3seed_summary.json
+Artifact: [test_artifacts/cifar10_lowdata_3seed_selected/lowdata_3seed_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/cifar10_lowdata_3seed_selected/lowdata_3seed_summary.json)
 
 This suggests that for natural images, linear_state is now generally safer and stronger
 
@@ -359,8 +357,7 @@ On one successful seed of 8, codebook was slightly higher than linear_state:
 But on seed 3, the average is already in favor of linear_state:
 - linear_state OOD mean: 72.83%
 - codebook OOD mean: 64.2%
-And most importantly: codebook has a very wide spread of seeds. Artifact: .test_artifacts/
-step47_left_right_relation_expanded_ood_pool_3seed_2026-04-20/left_right_relation_3seed_summary.json
+And most importantly: codebook has a very wide spread of seeds. Artifact: [test_artifacts/left_right_relation_3seed/left_right_relation_3seed_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/left_right_relation_3seed/left_right_relation_3seed_summary.json)
 
 That is, relational problems may be codebook-friendly, but linear_state seems more stable for now
 
@@ -407,241 +404,226 @@ We can literally see this in code
 
 This section is not intended to demonstrate the perfection of the architecture (that would be unserious), but only to strengthen its basic capabilities and indicate the correctness of the passed tests, while also discarding questions about data leakage.
 
-  The strongest audit was done on the synthetic relation OOD benchmark, because that is the place where one could most
-  reasonably suspect accidental leakage, shortcuting, or bad split construction.
+The strongest audit was done on the synthetic relation OOD benchmark, because that is the place where one could most reasonably suspect accidental leakage, shortcuting, or bad split construction.
 
-  The relevant artifact is:
+The relevant artifact is:
 
-  .test_artifacts/step48_left_right_relation_leakage_audit_seed8_2026-04-20/left_right_relation_leakage_audit.json
+[test_artifacts/left_right_relation_leakage_audit_seed8/left_right_relation_leakage_audit.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/left_right_relation_leakage_audit_seed8/left_right_relation_leakage_audit.json)
 
-  The corresponding benchmark report is:
+The corresponding benchmark report is:
 
-  .test_artifacts/step48_left_right_relation_leakage_audit_seed8_2026-04-20/benchmark/left_right_relation_benchmark.json
+[test_artifacts/left_right_relation_leakage_audit_seed8/benchmark/left_right_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/left_right_relation_leakage_audit_seed8/benchmark/left_right_relation_benchmark.json)
 
-  What was checked there?
+What was checked there?
 
-  First, exact duplicate hashes across splits were checked.
+First, exact duplicate hashes across splits were checked.
 
-  The result was:
+The result was:
 ```
-  - train_val = 0
-  - train_val_ood = 0
-  - train_test_iid = 0
-  - train_test_ood = 0
-  - val_ood_test_ood = 0
-  - test_iid_test_ood = 0
+- train_val = 0
+- train_val_ood = 0
+- train_test_iid = 0
+- train_test_ood = 0
+- val_ood_test_ood = 0
+- test_iid_test_ood = 0
 ```
-  This does not prove that the distributions are “good” in any deep sense. It proves something much simpler and more
-  important: there are no exact repeated samples crossing the major split boundaries.
 
-  Second, the reported accuracies were recomputed in three different ways:
+This does not prove that the distributions are “good” in any deep sense. It proves something much simpler and more important: there are no exact repeated samples crossing the major split boundaries.
 
-  - from the JSON benchmark report
-  - from exported CSV prediction tables
-  - from the saved selected checkpoint itself
+Second, the reported accuracies were recomputed in three different ways:
 
-  For all three models in that audit run, these numbers matched exactly.
+- from the JSON benchmark report
+- from exported CSV prediction tables
+- from the saved selected checkpoint itself
 
-  The selected accuracies were:
+For all three models in that audit run, these numbers matched exactly.
+
+The selected accuracies were:
 ```
-  - transformer_relation_classifier: iid 0.779, ood 0.745
-  - pascnn_relation_codebook_classifier: iid 0.764, ood 0.754
-  - pascnn_relation_linear_state_classifier: iid 0.771, ood 0.752
+- transformer_relation_classifier: iid 0.779, ood 0.745
+- pascnn_relation_codebook_classifier: iid 0.764, ood 0.754
+- pascnn_relation_linear_state_classifier: iid 0.771, ood 0.752
 ```
-  and the same values were recovered from **json/csv/checkpoint selected**
 
-  This matters because it removes a very stupid but very real failure mode: “pretty numbers in summary, different
-  numbers in actual predictions”.
+and the same values were recovered from **json/csv/checkpoint selected**
 
-  Third, single-side leakage was checked.
+This matters because it removes a very stupid but very real failure mode: “pretty numbers in summary, different numbers in actual predictions”.
 
-  The relation benchmark is supposed to depend on the relation between left and right halves. So if one side alone
-  already carries the answer, the task is partly broken.
+Third, single-side leakage was checked.
 
-  The audit therefore evaluated:
+The relation benchmark is supposed to depend on the relation between left and right halves. So if one side alone already carries the answer, the task is partly broken.
 
-  - left_only_test_ood_accuracy
-  - right_only_test_ood_accuracy
+The audit therefore evaluated:
 
-  Chance level in that benchmark is 0.25.
+- left_only_test_ood_accuracy
+- right_only_test_ood_accuracy
 
-  The results were:
+Chance level in that benchmark is 0.25.
+
+The results were:
 ```
-  - transformer: left-only 0.242, right-only 0.230
-  - codebook: left-only 0.260, right-only 0.226
-  - linear_state: left-only 0.240, right-only 0.221
+- transformer: left-only 0.242, right-only 0.230
+- codebook: left-only 0.260, right-only 0.226
+- linear_state: left-only 0.240, right-only 0.221
 ```
-  This is close to chance for all three models. So there is no sign that the label is leaking in any strong way through
-  only one half of the image.
 
-  Fourth, a broken-pair control was checked.
+This is close to chance for all three models. So there is no sign that the label is leaking in any strong way through only one half of the image.
 
-  In that control, the left half is taken from one sample and the right half from another, while the original label is
-  kept. This destroys the intended relation.
+Fourth, a broken-pair control was checked.
 
-  If accuracy remains high there, then the model is probably not solving the relation task honestly.
+In that control, the left half is taken from one sample and the right half from another, while the original label is kept. This destroys the intended relation.
 
-  The results were:
+If accuracy remains high there, then the model is probably not solving the relation task honestly.
+
+The results were:
 ```
-  - transformer: 0.247
-  - codebook: 0.255
-  - linear_state: 0.247
+- transformer: 0.247
+- codebook: 0.255
+- linear_state: 0.247
 ```
-  Again, this is approximately chance. So once the left-right relation is destroyed, the models stop working. This is
-  the expected behavior.
 
-  That is one of the strongest checks in the repository.
+Again, this is approximately chance. So once the left-right relation is destroyed, the models stop working. This is the expected behavior.
 
-  There is also a more general validity point about checkpoint selection.
+That is one of the strongest checks in the repository.
 
-  In the relation benchmark, the selected checkpoint is chosen by val_ood, not by test_ood. This is visible in the
-  benchmark code and is reflected in the saved report. So the test split is not directly used to pick the final model.
+There is also a more general validity point about checkpoint selection.
 
-  That still does not make the benchmark sacred. It simply removes the most obvious form of test-time model selection.
+In the relation benchmark, the selected checkpoint is chosen by val_ood, not by test_ood. This is visible in the benchmark code and is reflected in the saved report. So the test split is not directly used to pick the final model.
 
-  Another validity check is repetition across seeds.
+That still does not make the benchmark sacred. It simply removes the most obvious form of test-time model selection.
 
-  A single good run is not enough, especially on a synthetic benchmark. That is why the expanded relation OOD benchmark
-  was rerun for three seeds:
+Another validity check is repetition across seeds.
 
-  .test_artifacts/step47_left_right_relation_expanded_ood_pool_3seed_2026-04-20/left_right_relation_3seed_summary.json
+A single good run is not enough, especially on a synthetic benchmark. That is why the expanded relation OOD benchmark was rerun for three seeds:
 
-  The mean selected accuracies there were:
+[test_artifacts/left_right_relation_3seed/left_right_relation_3seed_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/left_right_relation_3seed/left_right_relation_3seed_summary.json)
+
+The mean selected accuracies there were:
 ```
-  - transformer: iid 0.7600, ood 0.7187
-  - codebook: iid 0.6630, ood 0.6420
-  - linear_state: iid 0.7667, ood 0.7283
+- transformer: iid 0.7600, ood 0.7187
+- codebook: iid 0.6630, ood 0.6420
+- linear_state: iid 0.7667, ood 0.7283
 ```
-  The important point here is not that the gap is huge. It is not huge.
 
-  The important point is that the single-run result did not completely disappear under repetition. linear_state remained
-  approximately at parity or slightly above the matched transformer on this benchmark, while codebook showed noticeably
-  larger instability.
+The important point here is not that the gap is huge. It is not huge.
 
-  A similar point applies to CIFAR low-data. That result was also not left as a single-run anecdote.
+The important point is that the single-run result did not completely disappear under repetition. linear_state remained approximately at parity or slightly above the matched transformer on this benchmark, while codebook showed noticeably larger instability.
 
-  Artifact:
+A similar point applies to CIFAR low-data. That result was also not left as a single-run anecdote.
 
-  .test_artifacts/step41_cifar10_lowdata_3seed_selected_2026-04-19/lowdata_3seed_summary.json
+Artifact:
 
-  Mean best test accuracies there were:
+[test_artifacts/cifar10_lowdata_3seed_selected/lowdata_3seed_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/cifar10_lowdata_3seed_selected/lowdata_3seed_summary.json)
+
+Mean best test accuracies there were:
 ```
-  For 50 examples per class:
+For 50 examples per class:
 
-  - transformer: 19.55%
-  - linear_state: 22.60%
-  - codebook: 16.33%
+- transformer: 19.55%
+- linear_state: 22.60%
+- codebook: 16.33%
 
-  For 500 examples per class:
+For 500 examples per class:
 
-  - transformer: 38.28%
-  - linear_state: 37.70%
-  - codebook: 31.15%
+- transformer: 38.28%
+- linear_state: 37.70%
+- codebook: 31.15%
 
-  For 1000 examples per class:
+For 1000 examples per class:
 
-  - transformer: 46.07%
-  - linear_state: 45.65%
-  - codebook: 40.30%
+- transformer: 46.07%
+- linear_state: 45.65%
+- codebook: 40.30%
 ```
-  This is not an “always wins” story. It is more modest than that.
 
-  It says that under very low data, linear_state can outperform the matched ViT-like baseline, but the advantage weakens
-  as the budget grows.
+This is not an “always wins” story. It is more modest than that.
 
-  One more validity point is internal diagnostics.
+It says that under very low data, linear_state can outperform the matched ViT-like baseline, but the advantage weakens as the budget grows.
 
-  On CIFAR-10, the early problem was not bad top-1 alone, but a dead core: edge_amplitude was collapsing near zero.
-  After the scale fixes, the benchmark showed that the core was no longer numerically dormant.
+One more validity point is internal diagnostics.
 
-  Artifact:
+On CIFAR-10, the early problem was not bad top-1 alone, but a dead core: edge_amplitude was collapsing near zero.
+After the scale fixes, the benchmark showed that the core was no longer numerically dormant.
 
-  .test_artifacts/step39_cifar10_20epoch_compare_2026-04-19/cifar10_benchmark.json
+Artifact:
 
-  At 20 epochs:
+[test_artifacts/cifar10_20epoch_compare/cifar10_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/cifar10_20epoch_compare/cifar10_benchmark.json)
+
+At 20 epochs:
 ```
-  - pASCNN + linear_state: best test accuracy 52.75%, final edge_amplitude_mean about 0.913
-  - pASCNN + codebook: best/final test accuracy 48.95%, final edge_amplitude_mean about 0.559
-  - transformer: best test accuracy 51.10%
+- pASCNN + linear_state: best test accuracy 52.75%, final edge_amplitude_mean about 0.913
+- pASCNN + codebook: best/final test accuracy 48.95%, final edge_amplitude_mean about 0.559
+- transformer: best test accuracy 51.10%
 ```
-  This does not prove a theorem. It shows that the improvement did not come from a dead decorative core. The diagnostics
-  moved together with the training behavior.
 
-  Finally, there is the frozen-cell readout probe.
+This does not prove a theorem. It shows that the improvement did not come from a dead decorative core. The diagnostics moved together with the training behavior.
 
-  Artifact:
+Finally, there is the frozen-cell readout probe.
 
-  .test_artifacts/step25_frozen_cell_readout_sweep_2026-04-18/frozen_cell_readout_sweep_summary.json
+Artifact:
 
-  Summary values:
+[test_artifacts/frozen_cell_readout_sweep/frozen_cell_readout_sweep_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/frozen_cell_readout_sweep/frozen_cell_readout_sweep_summary.json)
+
+Summary values:
 ```
-  - source pASCNN codebook: 26.04% ± 2.09
-  - linear_state head on cached state: 44.16% ± 1.99
-  - linear_logp head: 31.13% ± 2.36
-  - soft trainable codebook head: 29.40% ± 2.13
+- source pASCNN codebook: 26.04% ± 2.09
+- linear_state head on cached state: 44.16% ± 1.99
+- linear_logp head: 31.13% ± 2.36
+- soft trainable codebook head: 29.40% ± 2.13
 ```
-  This is not a leakage audit in the strict sense. It is a structural sanity check.
 
-  It shows that the core state can contain useful information even when the default codebook readout is weak. That
-  distinction matters later when discussing why codebook and linear_state behave differently.
+This is not a leakage audit in the strict sense. It is a structural sanity check.
 
-  What can honestly be concluded from all of this?
+It shows that the core state can contain useful information even when the default codebook readout is weak. That distinction matters later when discussing why codebook and linear_state behave differently.
 
-  The repository does not prove the absence of all possible bugs.
+What can honestly be concluded from all of this?
 
-  It does remove the most obvious and dangerous failure modes:
+The repository does not prove the absence of all possible bugs.
 
-  - direct duplicate leakage across splits
-  - one-sided label leakage in the relation benchmark
-  - fake relation performance under broken left-right pairing
-  - reporting mismatch between summary metrics and actual saved predictions
-  - single-seed storytelling without any repeated runs
+It does remove the most obvious and dangerous failure modes:
 
-  What remains possible?
+- direct duplicate leakage across splits
+- one-sided label leakage in the relation benchmark
+- fake relation performance under broken left-right pairing
+- reporting mismatch between summary metrics and actual saved predictions
+- single-seed storytelling without any repeated runs
 
-  - ordinary implementation bugs
-  - imperfect synthetic benchmark design
-  - benchmark-specific bias
-  - instability that only appears under broader sweeps
-  - claims that are still too strong if one generalizes beyond the tested tasks
+What remains possible?
 
-  That is fine. A research document does not need to pretend otherwise.
+- ordinary implementation bugs
+- imperfect synthetic benchmark design
+- benchmark-specific bias
+- instability that only appears under broader sweeps
+- claims that are still too strong if one generalizes beyond the tested tasks
 
-  The point of this part is simply that the results here were not accepted blindly. The obvious failure modes were
-  checked, and where checks were available, they were passed.                 
+That is fine. A research document does not need to pretend otherwise.
 
-  ---
+The point of this part is simply that the results here were not accepted blindly. The obvious failure modes were checked, and where checks were available, they were passed.
 
-  Finally, I'd like to address one detail. I don't think it's worth making a separate section explaining the specifics.
-  This has already been done above. For convenience, perhaps a table like this will be included, but that's beside the
-  point.
+---
 
-  All the main processes occur in a five-vertex core. You may already have seen the approximate topological drawing
-  above, but what about the readout?
+Finally, I'd like to address one detail. I don't think it's worth making a separate section explaining the specifics.
+This has already been done above. For convenience, perhaps a table like this will be included, but that's beside the point.
 
-  The final decision is not read from all five vertices equally.
+All the main processes occur in a five-vertex core. You may already have seen the approximate topological drawing above, but what about the readout?
 
-  In the current implementation, only the logical vertices -1, 0, and +1 participate directly in the output path. The
-  vertices L and R remain part of the internal wave-side dynamics, but they are not themselves class vertices.
+The final decision is not read from all five vertices equally.
 
-  This matters because the output is not taken from a flat hidden vector in the usual way. It is taken from the logical
-  part of the updated core state after message passing has already occurred.
+In the current implementation, only the logical vertices -1, 0, and +1 participate directly in the output path. The vertices L and R remain part of the internal wave-side dynamics, but they are not themselves class vertices.
 
-  At this point the architecture splits into two readout branches.
+This matters because the output is not taken from a flat hidden vector in the usual way. It is taken from the logical part of the updated core state after message passing has already occurred.
 
-  The first is codebook.
+At this point the architecture splits into two readout branches.
 
-  In this branch, the logical complex state is converted into ternary Born-style logical probabilities, and the class is
-  then decoded through a fixed class codebook. In other words, the model is forced to pass through a discrete logical
-  bottleneck before producing class scores.
+The first is codebook.
 
-  The second is linear_state.
+In this branch, the logical complex state is converted into ternary Born-style logical probabilities, and the class is then decoded through a fixed class codebook. In other words, the model is forced to pass through a discrete logical bottleneck before producing class scores.
 
-  In this branch, the model does not decode through the ternary codebook. Instead, it takes the updated logical complex
-  state itself, separates real and imaginary parts, and feeds them to a linear classifier. This is a wider and less
-  restrictive readout path.
+The second is linear_state.
 
-  So the difference is not in the Core itself. The difference is in how the final information is read from it.
+In this branch, the model does not decode through the ternary codebook. Instead, it takes the updated logical complex state itself, separates real and imaginary parts, and feeds them to a linear classifier. This is a wider and less restrictive readout path.
+
+So the difference is not in the Core itself. The difference is in how the final information is read from it.
 
 Why am I talking about this?
 
