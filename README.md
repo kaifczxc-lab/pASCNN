@@ -600,6 +600,53 @@ That is fine. A research document does not need to pretend otherwise.
 
 The point of this part is simply that the results here were not accepted blindly. The obvious failure modes were checked, and where checks were available, they were passed.
 
+
+  ## Part 4 | Re-running the attached tests
+
+A very quick description, if you really want to check the work, unfortunately there is no easy way yet
+
+  The repository is presented in a document-oriented layout, not as a ready-made Python package.
+  So before running the attached tests, the reader should perform one small manual packaging step.
+
+  After cloning the repository, create a folder named `pascnn` in the repository root.
+
+  Then move the following into `pascnn/`:
+
+  - `adapters/`
+  - `core/`
+  - `models/`
+  - `native/`
+  - `ops/`
+  - `training/`
+  - `diagnostics.py`
+  - `types.py`
+
+  The folders `tests/` and `.test_artifacts/` should remain in the repository root.
+
+  After that, the package layout matches the import paths used by the tests, and the attached test subset can be run with:
+
+```
+  python -m unittest \
+    tests.test_pascnn_cell \
+    tests.test_pascnn_diagnostics \
+    tests.test_cifar10_benchmark \
+    tests.test_left_right_relation_benchmark \
+    tests.test_left_right_relation_leakage_audit
+```
+  These tests are the ones referred to in this document.
+
+  What they check:
+
+  - tests.test_pascnn_cell verifies core forward shapes, diagnostics, and gradient flow.
+  - tests.test_pascnn_diagnostics verifies that the diagnostic quantities are computed consistently.
+  - tests.test_cifar10_benchmark runs a small one-epoch benchmark smoke test.
+  - tests.test_left_right_relation_benchmark runs a small one-epoch relation benchmark smoke test.
+  - tests.test_left_right_relation_leakage_audit reruns the leakage audit on the relation setup.
+
+  The attached tests do not require rebuilding the repository into a full installable package.
+  They only require the module layout to match the pascnn.* import paths used in the code.
+
+
 ---
 
 Finally, I'd like to address one detail. I don't think it's worth making a separate section explaining the specifics.
