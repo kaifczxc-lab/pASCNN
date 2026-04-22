@@ -9,8 +9,6 @@ Most of the code was written using LLM (which can make the code difficult to rea
 
 The work was completed by one person
 
-I also don't deny that similar work may have been done, but I personally haven't seen architectures with the makings of p-adic structures and bundles, along with a ternary readout system in the form of a codebook (which can currently compete with others in only one of three tests conducted)
-
 Here the description about technology
 
 ## Part 0 | Definitions & Scope:
@@ -36,6 +34,8 @@ Regarding p-adic, if we take the [academic definition of p-adic numbers](https:/
 no Q_p, no infinite expansions, no true norm
 
 Why? Doing this on a regular PyTorch, on a regular GPU -> a road to nowhere
+
+full Q_p arithmetic is not implemented in the current PyTorch/GPU realization
 
 Instead, an interesting system is used: "a computational surrogate for the p-adic ultrametric"
 
@@ -401,6 +401,255 @@ Explanation
 We can literally see this in code
 
 ---
+
+
+## Part 3 | Audit / Validity Checks
+
+This section is not intended to demonstrate the perfection of the architecture (that would be unserious), but only to strengthen its basic capabilities and indicate the correctness of the passed tests, while also discarding questions about data leakage.
+
+  The strongest audit was done on the synthetic relation OOD benchmark, because that is the place where one could most
+  reasonably suspect accidental leakage, shortcuting, or bad split construction.
+
+  The relevant artifact is:
+
+  .test_artifacts/step48_left_right_relation_leakage_audit_seed8_2026-04-20/left_right_relation_leakage_audit.json
+
+  The corresponding benchmark report is:
+
+  .test_artifacts/step48_left_right_relation_leakage_audit_seed8_2026-04-20/benchmark/left_right_relation_benchmark.json
+
+  What was checked there?
+
+  First, exact duplicate hashes across splits were checked.
+
+  The result was:
+```
+  - train_val = 0
+  - train_val_ood = 0
+  - train_test_iid = 0
+  - train_test_ood = 0
+  - val_ood_test_ood = 0
+  - test_iid_test_ood = 0
+```
+  This does not prove that the distributions are “good” in any deep sense. It proves something much simpler and more
+  important: there are no exact repeated samples crossing the major split boundaries.
+
+  Second, the reported accuracies were recomputed in three different ways:
+
+  - from the JSON benchmark report
+  - from exported CSV prediction tables
+  - from the saved selected checkpoint itself
+
+  For all three models in that audit run, these numbers matched exactly.
+
+  The selected accuracies were:
+```
+  - transformer_relation_classifier: iid 0.779, ood 0.745
+  - pascnn_relation_codebook_classifier: iid 0.764, ood 0.754
+  - pascnn_relation_linear_state_classifier: iid 0.771, ood 0.752
+```
+  and the same values were recovered from **json/csv/checkpoint selected**
+
+  This matters because it removes a very stupid but very real failure mode: “pretty numbers in summary, different
+  numbers in actual predictions”.
+
+  Third, single-side leakage was checked.
+
+  The relation benchmark is supposed to depend on the relation between left and right halves. So if one side alone
+  already carries the answer, the task is partly broken.
+
+  The audit therefore evaluated:
+
+  - left_only_test_ood_accuracy
+  - right_only_test_ood_accuracy
+
+  Chance level in that benchmark is 0.25.
+
+  The results were:
+```
+  - transformer: left-only 0.242, right-only 0.230
+  - codebook: left-only 0.260, right-only 0.226
+  - linear_state: left-only 0.240, right-only 0.221
+```
+  This is close to chance for all three models. So there is no sign that the label is leaking in any strong way through
+  only one half of the image.
+
+  Fourth, a broken-pair control was checked.
+
+  In that control, the left half is taken from one sample and the right half from another, while the original label is
+  kept. This destroys the intended relation.
+
+  If accuracy remains high there, then the model is probably not solving the relation task honestly.
+
+  The results were:
+```
+  - transformer: 0.247
+  - codebook: 0.255
+  - linear_state: 0.247
+```
+  Again, this is approximately chance. So once the left-right relation is destroyed, the models stop working. This is
+  the expected behavior.
+
+  That is one of the strongest checks in the repository.
+
+  There is also a more general validity point about checkpoint selection.
+
+  In the relation benchmark, the selected checkpoint is chosen by val_ood, not by test_ood. This is visible in the
+  benchmark code and is reflected in the saved report. So the test split is not directly used to pick the final model.
+
+  That still does not make the benchmark sacred. It simply removes the most obvious form of test-time model selection.
+
+  Another validity check is repetition across seeds.
+
+  A single good run is not enough, especially on a synthetic benchmark. That is why the expanded relation OOD benchmark
+  was rerun for three seeds:
+
+  .test_artifacts/step47_left_right_relation_expanded_ood_pool_3seed_2026-04-20/left_right_relation_3seed_summary.json
+
+  The mean selected accuracies there were:
+```
+  - transformer: iid 0.7600, ood 0.7187
+  - codebook: iid 0.6630, ood 0.6420
+  - linear_state: iid 0.7667, ood 0.7283
+```
+  The important point here is not that the gap is huge. It is not huge.
+
+  The important point is that the single-run result did not completely disappear under repetition. linear_state remained
+  approximately at parity or slightly above the matched transformer on this benchmark, while codebook showed noticeably
+  larger instability.
+
+  A similar point applies to CIFAR low-data. That result was also not left as a single-run anecdote.
+
+  Artifact:
+
+  .test_artifacts/step41_cifar10_lowdata_3seed_selected_2026-04-19/lowdata_3seed_summary.json
+
+  Mean best test accuracies there were:
+```
+  For 50 examples per class:
+
+  - transformer: 19.55%
+  - linear_state: 22.60%
+  - codebook: 16.33%
+
+  For 500 examples per class:
+
+  - transformer: 38.28%
+  - linear_state: 37.70%
+  - codebook: 31.15%
+
+  For 1000 examples per class:
+
+  - transformer: 46.07%
+  - linear_state: 45.65%
+  - codebook: 40.30%
+```
+  This is not an “always wins” story. It is more modest than that.
+
+  It says that under very low data, linear_state can outperform the matched ViT-like baseline, but the advantage weakens
+  as the budget grows.
+
+  One more validity point is internal diagnostics.
+
+  On CIFAR-10, the early problem was not bad top-1 alone, but a dead core: edge_amplitude was collapsing near zero.
+  After the scale fixes, the benchmark showed that the core was no longer numerically dormant.
+
+  Artifact:
+
+  .test_artifacts/step39_cifar10_20epoch_compare_2026-04-19/cifar10_benchmark.json
+
+  At 20 epochs:
+```
+  - pASCNN + linear_state: best test accuracy 52.75%, final edge_amplitude_mean about 0.913
+  - pASCNN + codebook: best/final test accuracy 48.95%, final edge_amplitude_mean about 0.559
+  - transformer: best test accuracy 51.10%
+```
+  This does not prove a theorem. It shows that the improvement did not come from a dead decorative core. The diagnostics
+  moved together with the training behavior.
+
+  Finally, there is the frozen-cell readout probe.
+
+  Artifact:
+
+  .test_artifacts/step25_frozen_cell_readout_sweep_2026-04-18/frozen_cell_readout_sweep_summary.json
+
+  Summary values:
+```
+  - source pASCNN codebook: 26.04% ± 2.09
+  - linear_state head on cached state: 44.16% ± 1.99
+  - linear_logp head: 31.13% ± 2.36
+  - soft trainable codebook head: 29.40% ± 2.13
+```
+  This is not a leakage audit in the strict sense. It is a structural sanity check.
+
+  It shows that the core state can contain useful information even when the default codebook readout is weak. That
+  distinction matters later when discussing why codebook and linear_state behave differently.
+
+  What can honestly be concluded from all of this?
+
+  The repository does not prove the absence of all possible bugs.
+
+  It does remove the most obvious and dangerous failure modes:
+
+  - direct duplicate leakage across splits
+  - one-sided label leakage in the relation benchmark
+  - fake relation performance under broken left-right pairing
+  - reporting mismatch between summary metrics and actual saved predictions
+  - single-seed storytelling without any repeated runs
+
+  What remains possible?
+
+  - ordinary implementation bugs
+  - imperfect synthetic benchmark design
+  - benchmark-specific bias
+  - instability that only appears under broader sweeps
+  - claims that are still too strong if one generalizes beyond the tested tasks
+
+  That is fine. A research document does not need to pretend otherwise.
+
+  The point of this part is simply that the results here were not accepted blindly. The obvious failure modes were
+  checked, and where checks were available, they were passed.                 
+
+  ---
+
+  Finally, I'd like to address one detail. I don't think it's worth making a separate section explaining the specifics.
+  This has already been done above. For convenience, perhaps a table like this will be included, but that's beside the
+  point.
+
+  All the main processes occur in a five-vertex core. You may already have seen the approximate topological drawing
+  above, but what about the readout?
+
+  The final decision is not read from all five vertices equally.
+
+  In the current implementation, only the logical vertices -1, 0, and +1 participate directly in the output path. The
+  vertices L and R remain part of the internal wave-side dynamics, but they are not themselves class vertices.
+
+  This matters because the output is not taken from a flat hidden vector in the usual way. It is taken from the logical
+  part of the updated core state after message passing has already occurred.
+
+  At this point the architecture splits into two readout branches.
+
+  The first is codebook.
+
+  In this branch, the logical complex state is converted into ternary Born-style logical probabilities, and the class is
+  then decoded through a fixed class codebook. In other words, the model is forced to pass through a discrete logical
+  bottleneck before producing class scores.
+
+  The second is linear_state.
+
+  In this branch, the model does not decode through the ternary codebook. Instead, it takes the updated logical complex
+  state itself, separates real and imaginary parts, and feeds them to a linear classifier. This is a wider and less
+  restrictive readout path.
+
+  So the difference is not in the Core itself. The difference is in how the final information is read from it.
+
+Why am I talking about this?
+
+Earlier, while creating [my previous work](https://github.com/kaifczxc-lab/PyQITNN) (which I consider rather mediocre), I encountered exactly this problem: when projecting, my three states were reset to two states and one ignore state (due to the fact that my topological triangle in the core was converted into a 1D scalar in the readout. I think I don't need an explanation why this is bad, at least for me). Perhaps you'll say, "But that's normal for ternary architectures."
+
+And in some cases, this answer is indeed correct. The whole problem was that I wanted state 0 to be as useful as state -1 and state 1, which is why I had to rework the readout method (funny note: this didn't particularly help the logical component of the model, and it seems to have even overloaded it, although this is just my guess).
+
+Thanks reader for reading this document. This repository will most often only be updated with additional architecture tests, if at all. At the moment, this is just an experimental architecture, another new presentation. and so on, I don't claim to be the best, I'm just showing what I've been working on
 
 
 ## Resources:
