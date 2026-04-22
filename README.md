@@ -86,22 +86,53 @@ The non-standard part begins after the encoder.
 
 Instead of a regular linear classifier on top of the encoder embedding, pASCNN has a separate PASCNNCell. This core:
 
-- builds complex states on 5 fixed vertices
+- builds complex states on 5 fixed vertices — let h = encoder embedding; D = hidden dim;
+
+$$s_{b,v,d}=\frac{W_{re}(h)_{b,v,d}+i\,W_{im}(h)_{b,v,d}}{\sqrt{D}}$$
+
+  confirmed by core/cell.py:103-119
 
 - builds finite-depth branch-code logits and branch probabilities
 
-- calculates prefix matching between branch codes on edges
+  Code: core/cell.py:121-127 -> return self.branch_logits_init(h).reshape(batch_size, self.config.num_vertices, self.config.branch_depth, self.config.branch_base)
+
+  and core/cell.py:200 -> digit_probabilities = torch.softmax(digit_logits, dim=-1)
+
+- calculates prefix matching between branch codes on edges — let q^(s), q^(t) = source/target digit probabilities;
+
+$$a_{b,e,k}=\sum_p q^{(s)}_{b,e,k,p}q^{(t)}_{b,e,k,p},\;\;c_{b,e,k}=\prod_{j\le k}a_{b,e,j},\;\;m_{b,e}=\sum_k c_{b,e,k}$$
+
+  confirmed by ops/reference.py:266-268
 
 - calculates typed transport defects between vertex states
-- calculates coherence amplitude and phase
+
+  Code: ops/reference.py:317-320 -> source_transport = selected_source_diagonal * source ; target_transport = selected_target_diagonal * target ; defect = source_transport - target_transport ; defect_norm_sq = defect.abs().square().sum(dim=-1)
+
+- calculates coherence amplitude and phase — let m = prefix depth; δ = defect norm; t = edge type;
+
+$$\phi_{b,e}=b_t+\gamma_t\,m_{b,e},\;\;A_{b,e}=\sigma\!\big(\alpha_t(m_{b,e}-\tau_t)\big)\exp(-|\beta_t|\,\delta_{b,e})$$
+
+  confirmed by ops/reference.py:396-399
 
 - builds complex edge messages
 
+  Code: ops/reference.py:400-403 -> edge_coefficient = torch.polar(edge_amplitude, edge_phase) ; edge_message = edge_mean * edge_coefficient.unsqueeze(-1)
+
 - scatters them back to vertices
+
+  Code: core/cell.py:237-243 -> vertex_message_sum = complex_scatter_add(edge_messages=coherence.edge_message, incidence_index=self.incidence_index, num_vertices=self.config.num_vertices, backend=op_backend)
 
 - updates vertex states
 
+  Code: core/cell.py:245-246 -> self_update = self.self_diagonal.unsqueeze(0) * vertex_state ; vertex_state = self_update + vertex_message_sum
+
 - then returns either Born/codebook readout or logical states to the linear head
+
+  Code: core/cell.py:254 -> readout = self.readout(vertex_state)
+
+  training/cifar10_benchmark.py:397-402 -> class_log_scores = torch.gather(...).squeeze(-1).sum(dim=-1)
+
+  training/cifar10_benchmark.py:476-484 -> logical_vertex_state = cell_outputs.vertex_state[:, LOGIC_VERTEX_INDICES, :] ; class_log_scores = self.classifier(state_features)
 
 All this can be seen and examined in core/cell.py & types.py & ops/reference.py
 
@@ -109,7 +140,9 @@ How the core is structured
 
 If we remove all the noise, the core's mental model is as follows:
 
-- there are 5 internal roles: **L, R, -1, 0, +1**
+- there are 5 internal roles: L, R, -1, 0, +1
+
+  Code: types.py:15 -> VERTEX_LABELS = ("L", "R", "-1", "0", "+1")
 
 ### <div align="center">Visualizing</div>
 
@@ -123,27 +156,59 @@ This figure shows the fixed internal topology of the pASCNN core
 
 L and R form the wave edge, -1, 0, and +1 form the logic subgraph, and the remaining red edges are cross-connections between the wave and logical parts
 
+Code: types.py:38-54 -> EDGE_ENDPOINTS = (...) ; EDGE_TYPES = ("logic", "logic", "logic", "wave", "cross", ...)
+
 The readout is taken from the updated logical state and is not itself a graph vertex
+
+Code: types.py:29-32 -> LOGIC_VERTEX_INDICES = (VERTEX_INDEX["-1"], VERTEX_INDEX["0"], VERTEX_INDEX["+1"])
+
+and core/readout.py:40-49 -> logic_amplitudes ... logic_probabilities = logic_energy / normalization
 
 ---
 
 - between them are fixed typed edges: logic / wave / cross
 
-- each vertex has a complex state
+  Code: types.py:50-64 -> EDGE_TYPES = (...) ; CANONICAL_EDGE_TYPE_INDEX = tuple(EDGE_TYPE_INDEX[edge_type] for edge_type in EDGE_TYPES)
+
+- each vertex has a complex state — let h = encoder embedding; D = hidden dim;
+
+$$
+s_{b,v,d}=\frac{W_{re}(h)_{b,v,d}+i\,W_{im}(h)_{b,v,d}}{\sqrt{D}}
+$$
+
+  confirmed by core/cell.py:103-119
 
 - each vertex has a finite-depth branch code
 
-- branch codes are compared via soft prefix similarity
+  Code: core/cell.py:121-127 -> branch_logits_init(h).reshape(batch_size, self.config.num_vertices, self.config.branch_depth, self.config.branch_base)
+
+  and core/cell.py:200 -> digit_probabilities = torch.softmax(digit_logits, dim=-1)
+
+- branch codes are compared via soft prefix similarity — let q^(s), q^(t) = source/target digit probabilities;
+
+$$a_{b,e,k}=\sum_p q^{(s)}_{b,e,k,p}q^{(t)}_{b,e,k,p},\;\;c_{b,e,k}=\prod_{j\le k}a_{b,e,j},\;\;m_{b,e}=\sum_k c_{b,e,k}$$
+
+  confirmed by ops/reference.py:266-268
 
 - complex states are compared via a typed transport defect
 
+  Code: ops/reference.py:317-320 -> source_transport = selected_source_diagonal * source ; target_transport = selected_target_diagonal * target ; defect = source_transport - target_transport ; defect_norm_sq = defect.abs().square().sum(dim=-1)
+
 - the prefix and defect together control the coherence gate
+
+  Test: .test_artifacts/step39_cifar10_20epoch_compare_2026-04-19/cifar10_benchmark.json logs edge_prefix_depth_to_uniform_ratio_mean, edge_defect_norm_sq_normalized_mean, and edge_amplitude_mean in the same run
 
 - the coherence gate sets the complex edge message
 
+  Code: ops/reference.py:396-403 -> edge_phase = ... ; edge_amplitude = ... ; edge_coefficient = torch.polar(edge_amplitude, edge_phase) ; edge_message = edge_mean * edge_coefficient.unsqueeze(-1)
+
 - edge messages update vertex states
 
+  Code: core/cell.py:238-246 -> vertex_message_sum = complex_scatter_add(...) ; self_update = self.self_diagonal.unsqueeze(0) * vertex_state ; vertex_state = self_update + vertex_message_sum
+
 - the decision is then read from the logical part of this state
+
+  Test: .test_artifacts/step25_frozen_cell_readout_sweep_2026-04-18/frozen_cell_readout_sweep_summary.json compares a0_source_pascnn_codebook vs a3_linear_state_head, i.e. the two readout paths on the same core-state family
 
 In other words, the core is a small typed complex graph machine, not attention-over-patches.
 
