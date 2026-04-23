@@ -5,7 +5,7 @@ disclaimer: pASCNN is the experimental variant of unusual neural network archite
 
 My work is not SOTA, this arch is extremely new, but it produces results consistently higher than those presented to it by its opponents, the basic ViT-like transformer
 
-Most of the code was written using LLM (which can make the code difficult to read) under my complete control. The code was reviewed, but I could inevitably miss something. So, when talking about the correctness of the work done, I will refer to the correct test results and partially to the code, but it is obvious that the code cannot be without bugs and gaps
+Most of the code was written using LLM (which can make the code difficult to read) under my complete control. The code was reviewed, but I could inevitably miss something. So, when talking about the correctness of the work done, I will refer to the correct test results and partially to the code, but it is obvious that the code cannot be without bugs and gaps (I would like to point out that LLM did not invent this architecture, did not invent the formula, but only implemented the architecture in code)
 
 The work was completed by one person
 
