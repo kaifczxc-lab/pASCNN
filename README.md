@@ -29,7 +29,7 @@ What are these? These are different readout variants from the core, running on t
 
 The mathematics isn't the most rigorous, I tried to convey this in the title
 
-Regarding p-adic, if we take the [academic definition of p-adic numbers](https://en.wikipedia.org/wiki/P-adic_number), then compared to pASCNN, we get the following verdict:
+Regarding p-adic, if we take the [academic definition of p-adic numbers](https://mathworld.wolfram.com/p-adicNumber.html), then compared to pASCNN, we get the following verdict:
 
 no Q_p, no infinite expansions, no true norm
 
