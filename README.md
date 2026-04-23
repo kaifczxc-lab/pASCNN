@@ -412,7 +412,7 @@ We can literally see this in code
 ---
 
 
-## Part 3 | Audit / Validity Checks
+## Part 3 | Audit / Validity Checks / Tests and results
 
 This section is not intended to demonstrate the perfection of the architecture (that would be unserious), but only to strengthen its basic capabilities and indicate the correctness of the passed tests, while also discarding questions about data leakage.
 
@@ -588,6 +588,64 @@ This is not a leakage audit in the strict sense. It is a structural sanity check
 
 It shows that the core state can contain useful information even when the default codebook readout is weak. That distinction matters later when discussing why codebook and linear_state behave differently.
 
+### Additional tree-side audit should be read carefully.
+
+The first tree experiment was an autoregressive tree-generation setup. It produced `valid_tree_rate = 0.0` for both pASCNN and the matched transformer even after longer training, so it was treated as a failed representation setup rather than as positive evidence. For that reason, tree evaluation was moved away from string generation and into sample-level structural classification.
+
+The tree-side classification code and generators used here are:
+- [training/tree_relation_benchmark.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/training/tree_relation_benchmark.py)
+- [training/tree_balance_relation_benchmark.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/training/tree_balance_relation_benchmark.py)
+- [training/tree_dataset.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/training/tree_dataset.py)
+- [training/tree_synth.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/training/tree_synth.py)
+
+The corresponding tests are:
+- [tests/test_tree_relation_benchmark.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/tests/test_tree_relation_benchmark.py)
+- [tests/test_tree_balance_relation_benchmark.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/tests/test_tree_balance_relation_benchmark.py)
+- [tests/test_tree_dataset.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/tests/test_tree_dataset.py)
+- [tests/test_tree_synth.py](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/tests/test_tree_synth.py)
+
+Two tree classification benchmarks were then used.
+
+The first benchmark was a tree depth-relation task:
+train on depths `2, 3`, test OOD on depths `4, 5`, with ternary labels `left_deeper / equal_depth / right_deeper`.
+
+The 3-seed aggregate summary is:
+- [test_artifacts/tree_benchmark/tree_relation_3seed_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/tree_relation_3seed_summary.json)
+
+Per-seed reports and split manifests are:
+- [seed_7_basic_tree_bench/tree_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_7_basic_tree_bench/tree_relation_benchmark.json)
+- [seed_7_basic_tree_bench/tree_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_7_basic_tree_bench/tree_relation_splits.json)
+- [seed_8_basic_tree_bench/tree_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_8_basic_tree_bench/tree_relation_benchmark.json)
+- [seed_8_basic_tree_bench/tree_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_8_basic_tree_bench/tree_relation_splits.json)
+- [seed_9_basic_tree_bench/tree_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_9_basic_tree_bench/tree_relation_benchmark.json)
+- [seed_9_basic_tree_bench/tree_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_9_basic_tree_bench/tree_relation_splits.json)
+
+Across 3 seeds, the final mean test accuracies were:
+- transformer: IID `57.99%`, OOD `36.81%`
+- pASCNN + linear_state: IID `53.47%`, OOD `35.24%`
+- pASCNN + codebook: IID `36.46%`, OOD `33.51%`
+
+This benchmark therefore does not support a tree-side advantage for pASCNN. The matched transformer remained stronger here.
+
+The second benchmark was a harder tree balance-relation task.
+In that setup, both trees in each pair have the same total depth, and the label depends on comparing local root-balance states `left_heavy / balanced / right_heavy`. This removes the most obvious shortcut through global tree depth alone.
+
+The 3-seed aggregate summary is:
+- [test_artifacts/tree_benchmark/tree_balance_relation_3seed_summary.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/tree_balance_relation_3seed_summary.json)
+
+Per-seed reports and split manifests are:
+- [seed_7_harder_tree_bench/tree_balance_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_7_harder_tree_bench/tree_balance_relation_benchmark.json)
+- [seed_7_harder_tree_bench/tree_balance_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_7_harder_tree_bench/tree_balance_relation_splits.json)
+- [seed_8_harder_tree_bench/tree_balance_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_8_harder_tree_bench/tree_balance_relation_benchmark.json)
+- [seed_8_harder_tree_bench/tree_balance_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_8_harder_tree_bench/tree_balance_relation_splits.json)
+- [seed_9_harder_tree_bench/tree_balance_relation_benchmark.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_9_harder_tree_bench/tree_balance_relation_benchmark.json)
+- [seed_9_harder_tree_bench/tree_balance_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_9_harder_tree_bench/tree_balance_relation_splits.json)
+
+Across 3 seeds, the final mean test accuracies were:
+- transformer: IID `47.40%`, OOD `35.94%`
+- pASCNN + linear_state: IID `46.70%`, OOD `38.37%`
+- pASCNN + codebook: IID `33.33%`, OOD `32.99%`
+
 What can honestly be concluded from all of this?
 
 The repository does not prove the absence of all possible bugs.
@@ -657,6 +715,7 @@ A very quick description, if you really want to check the work, unfortunately th
 
   The attached tests do not require rebuilding the repository into a full installable package.
   They only require the module layout to match the pascnn.* import paths used in the code.
+
 
 
 ---
