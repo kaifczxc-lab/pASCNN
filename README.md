@@ -690,7 +690,7 @@ Earlier, while creating [my previous work](https://github.com/kaifczxc-lab/PyQIT
 
 And in some cases, this answer is indeed correct. The whole problem was that I wanted state 0 to be as useful as state -1 and state 1, which is why I had to rework the readout method (funny note: this didn't particularly help the logical component of the model, and it seems to have even overloaded it, although this is just my guess).
 
-Thanks reader for reading this document. This repository will most often only be updated with additional architecture tests, if at all. At the moment, this is just an experimental architecture, another new presentation. and so on, I don't claim to be the best, I'm just showing what I've been working on
+Thanks for reading this document. This repository will most often only be updated with additional architecture tests, if at all. At the moment, this is just an experimental architecture, another new presentation. and so on, I don't claim to be the best, I'm just showing what I've been working on
 
 
 ## Resources:
