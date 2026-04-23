@@ -396,18 +396,6 @@ probabilities cleaner
 - MNIST and some relational modes are more like problems where discrete bottlenecks can work
 - CIFAR and frozen-state probe are currently stronger in favor of linear_state
 
-Funny note:
-
-Why are codebook and linear_state called that way?
-There's one real reason for this.
-
-Explanation
-
-- linear_state says: "Give me the raw state, I'll figure it out myself."
-
-- codebook says: "Each class already has ready-made code, I'll check which code the output most closely resembles."
-
-We can literally see this in code
 
 ---
 
