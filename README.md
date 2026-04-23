@@ -621,9 +621,13 @@ Per-seed reports and split manifests are:
 - [seed_9_basic_tree_bench/tree_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_9_basic_tree_bench/tree_relation_splits.json)
 
 Across 3 seeds, the final mean test accuracies were:
+```
+
 - transformer: IID `57.99%`, OOD `36.81%`
 - pASCNN + linear_state: IID `53.47%`, OOD `35.24%`
 - pASCNN + codebook: IID `36.46%`, OOD `33.51%`
+
+```
 
 This benchmark therefore does not support a tree-side advantage for pASCNN. The matched transformer remained stronger here.
 
@@ -642,9 +646,12 @@ Per-seed reports and split manifests are:
 - [seed_9_harder_tree_bench/tree_balance_relation_splits.json](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/test_artifacts/tree_benchmark/seed_9_harder_tree_bench/tree_balance_relation_splits.json)
 
 Across 3 seeds, the final mean test accuracies were:
+
+```
 - transformer: IID `47.40%`, OOD `35.94%`
 - pASCNN + linear_state: IID `46.70%`, OOD `38.37%`
 - pASCNN + codebook: IID `33.33%`, OOD `32.99%`
+```
 
 What can honestly be concluded from all of this?
 
