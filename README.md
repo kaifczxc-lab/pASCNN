@@ -194,7 +194,11 @@ $$
 
 - branch codes are compared via soft prefix similarity — let q^(s), q^(t) = source/target digit probabilities;
 
-$$a_{b,e,k}=\sum_p q^{(s)}_{b,e,k,p}q^{(t)}_{b,e,k,p},\;\;c_{b,e,k}=\prod_{j\le k}a_{b,e,j},\;\;m_{b,e}=\sum_k c_{b,e,k}$$
+$$a_{b,e,k}=\sum_p q^{(s)}_{b,e,k,p}q^{(t)}_{b,e,k,p},$$
+
+$$c_{b,e,k}=\prod_{j\le k}a_{b,e,j},$$
+
+$$m_{b,e}=\sum_k c_{b,e,k}$$
 
   confirmed by [ops/reference.py:266-268](https://github.com/kaifczxc-lab/pASCNN/blob/SiritoriProjects/ops/reference.py#L266-L268)
 
