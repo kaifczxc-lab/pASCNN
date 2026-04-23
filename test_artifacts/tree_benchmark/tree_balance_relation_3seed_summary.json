@@ -1,0 +1,293 @@
+{
+  "aggregates": {
+    "codebook": {
+      "test_iid_accuracy": {
+        "mean": 0.3333333333333333,
+        "std": 0.0,
+        "values": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ]
+      },
+      "test_ood_accuracy": {
+        "mean": 0.3298611111111111,
+        "std": 0.00601406530405858,
+        "values": [
+          0.3333333333333333,
+          0.3229166666666667,
+          0.3333333333333333
+        ]
+      },
+      "val_iid_accuracy": {
+        "mean": 0.3333333333333333,
+        "std": 0.0,
+        "values": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ]
+      },
+      "val_ood_accuracy": {
+        "mean": 0.3333333333333333,
+        "std": 0.0,
+        "values": [
+          0.3333333333333333,
+          0.3333333333333333,
+          0.3333333333333333
+        ]
+      }
+    },
+    "linear_state": {
+      "test_iid_accuracy": {
+        "mean": 0.4670138888888889,
+        "std": 0.02569209824123046,
+        "values": [
+          0.4375,
+          0.4791666666666667,
+          0.484375
+        ]
+      },
+      "test_ood_accuracy": {
+        "mean": 0.3836805555555556,
+        "std": 0.04429635702143431,
+        "values": [
+          0.4166666666666667,
+          0.4010416666666667,
+          0.3333333333333333
+        ]
+      },
+      "val_iid_accuracy": {
+        "mean": 0.4652777777777778,
+        "std": 0.023485675795952572,
+        "values": [
+          0.4427083333333333,
+          0.4895833333333333,
+          0.4635416666666667
+        ]
+      },
+      "val_ood_accuracy": {
+        "mean": 0.34375,
+        "std": 0.047735163489123336,
+        "values": [
+          0.3958333333333333,
+          0.3020833333333333,
+          0.3333333333333333
+        ]
+      }
+    },
+    "transformer": {
+      "test_iid_accuracy": {
+        "mean": 0.47395833333333337,
+        "std": 0.04067838372868051,
+        "values": [
+          0.4479166666666667,
+          0.453125,
+          0.5208333333333334
+        ]
+      },
+      "test_ood_accuracy": {
+        "mean": 0.359375,
+        "std": 0.018778912893041597,
+        "values": [
+          0.375,
+          0.3645833333333333,
+          0.3385416666666667
+        ]
+      },
+      "val_iid_accuracy": {
+        "mean": 0.4565972222222222,
+        "std": 0.0521700666712386,
+        "values": [
+          0.4166666666666667,
+          0.4375,
+          0.515625
+        ]
+      },
+      "val_ood_accuracy": {
+        "mean": 0.3333333333333333,
+        "std": 0.013779954745128059,
+        "values": [
+          0.3489583333333333,
+          0.3229166666666667,
+          0.328125
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "codebook_final": {
+        "edge_amplitude_mean": 0.6685946881771088,
+        "edge_defect_norm_sq_normalized_mean": 0.014167804270982742,
+        "edge_prefix_depth_to_uniform_ratio_mean": 0.9992281198501587,
+        "epoch": 5,
+        "test_iid_accuracy": 0.3333333333333333,
+        "test_iid_loss": 1.0921072959899902,
+        "test_ood_accuracy": 0.3333333333333333,
+        "test_ood_loss": 1.1027872562408447,
+        "train_accuracy": 0.3255208333333333,
+        "train_loss": 1.0906122922897339,
+        "val_iid_accuracy": 0.3333333333333333,
+        "val_iid_loss": 1.0938636461893718,
+        "val_ood_accuracy": 0.3333333333333333,
+        "val_ood_loss": 1.1011560757954915,
+        "wave_prefix_depth_to_uniform_ratio_mean": 0.9964855313301086
+      },
+      "linear_state_final": {
+        "edge_amplitude_mean": 0.6787092685699463,
+        "edge_defect_norm_sq_normalized_mean": 0.008306426461786032,
+        "edge_prefix_depth_to_uniform_ratio_mean": 1.005618929862976,
+        "epoch": 5,
+        "test_iid_accuracy": 0.4375,
+        "test_iid_loss": 1.0074748198191326,
+        "test_ood_accuracy": 0.4166666666666667,
+        "test_ood_loss": 1.118566672007243,
+        "train_accuracy": 0.4973958333333333,
+        "train_loss": 1.0082966486612956,
+        "val_iid_accuracy": 0.4427083333333333,
+        "val_iid_loss": 1.0361498991648357,
+        "val_ood_accuracy": 0.3958333333333333,
+        "val_ood_loss": 1.1382704575856526,
+        "wave_prefix_depth_to_uniform_ratio_mean": 0.9894093573093414
+      },
+      "report_path": ".test_artifacts\\step55_tree_balance_relation_3seed_2026-04-23\\seed_7\\tree_balance_relation_benchmark.json",
+      "seed": 7,
+      "splits_path": ".test_artifacts\\step55_tree_balance_relation_3seed_2026-04-23\\seed_7\\tree_balance_relation_splits.json",
+      "transformer_final": {
+        "edge_amplitude_mean": null,
+        "edge_defect_norm_sq_normalized_mean": null,
+        "edge_prefix_depth_to_uniform_ratio_mean": null,
+        "epoch": 5,
+        "test_iid_accuracy": 0.4479166666666667,
+        "test_iid_loss": 1.030656337738037,
+        "test_ood_accuracy": 0.375,
+        "test_ood_loss": 1.1038391987482707,
+        "train_accuracy": 0.5104166666666666,
+        "train_loss": 1.033874770005544,
+        "val_iid_accuracy": 0.4166666666666667,
+        "val_iid_loss": 1.0643381277720134,
+        "val_ood_accuracy": 0.3489583333333333,
+        "val_ood_loss": 1.1134358247121174,
+        "wave_prefix_depth_to_uniform_ratio_mean": null
+      }
+    },
+    {
+      "codebook_final": {
+        "edge_amplitude_mean": 0.6642700433731079,
+        "edge_defect_norm_sq_normalized_mean": 0.021539640612900257,
+        "edge_prefix_depth_to_uniform_ratio_mean": 1.0011301636695862,
+        "epoch": 5,
+        "test_iid_accuracy": 0.3333333333333333,
+        "test_iid_loss": 1.101413607597351,
+        "test_ood_accuracy": 0.3229166666666667,
+        "test_ood_loss": 1.110878547032674,
+        "train_accuracy": 0.3333333333333333,
+        "train_loss": 1.1002259651819866,
+        "val_iid_accuracy": 0.3333333333333333,
+        "val_iid_loss": 1.098468820254008,
+        "val_ood_accuracy": 0.3333333333333333,
+        "val_ood_loss": 1.1098307768503826,
+        "wave_prefix_depth_to_uniform_ratio_mean": 1.0468448996543884
+      },
+      "linear_state_final": {
+        "edge_amplitude_mean": 0.678923100233078,
+        "edge_defect_norm_sq_normalized_mean": 0.0029366735834628344,
+        "edge_prefix_depth_to_uniform_ratio_mean": 1.0045923590660095,
+        "epoch": 5,
+        "test_iid_accuracy": 0.4791666666666667,
+        "test_iid_loss": 1.0716678301493328,
+        "test_ood_accuracy": 0.4010416666666667,
+        "test_ood_loss": 1.0944090684254963,
+        "train_accuracy": 0.5,
+        "train_loss": 1.0690318942070007,
+        "val_iid_accuracy": 0.4895833333333333,
+        "val_iid_loss": 1.0801449219385784,
+        "val_ood_accuracy": 0.3020833333333333,
+        "val_ood_loss": 1.1094279686609905,
+        "wave_prefix_depth_to_uniform_ratio_mean": 1.004878580570221
+      },
+      "report_path": ".test_artifacts\\step55_tree_balance_relation_3seed_2026-04-23\\seed_8\\tree_balance_relation_benchmark.json",
+      "seed": 8,
+      "splits_path": ".test_artifacts\\step55_tree_balance_relation_3seed_2026-04-23\\seed_8\\tree_balance_relation_splits.json",
+      "transformer_final": {
+        "edge_amplitude_mean": null,
+        "edge_defect_norm_sq_normalized_mean": null,
+        "edge_prefix_depth_to_uniform_ratio_mean": null,
+        "epoch": 5,
+        "test_iid_accuracy": 0.453125,
+        "test_iid_loss": 1.0697410901387532,
+        "test_ood_accuracy": 0.3645833333333333,
+        "test_ood_loss": 1.0923755963643391,
+        "train_accuracy": 0.4947916666666667,
+        "train_loss": 1.0666269063949585,
+        "val_iid_accuracy": 0.4375,
+        "val_iid_loss": 1.0746809641520183,
+        "val_ood_accuracy": 0.3229166666666667,
+        "val_ood_loss": 1.1044072310129802,
+        "wave_prefix_depth_to_uniform_ratio_mean": null
+      }
+    },
+    {
+      "codebook_final": {
+        "edge_amplitude_mean": 0.6749657392501831,
+        "edge_defect_norm_sq_normalized_mean": 0.010867437813431025,
+        "edge_prefix_depth_to_uniform_ratio_mean": 0.9970328509807587,
+        "epoch": 5,
+        "test_iid_accuracy": 0.3333333333333333,
+        "test_iid_loss": 1.1020544370015461,
+        "test_ood_accuracy": 0.3333333333333333,
+        "test_ood_loss": 1.1025680700937908,
+        "train_accuracy": 0.3515625,
+        "train_loss": 1.0962997674942017,
+        "val_iid_accuracy": 0.3333333333333333,
+        "val_iid_loss": 1.1007124582926433,
+        "val_ood_accuracy": 0.3333333333333333,
+        "val_ood_loss": 1.103726069132487,
+        "wave_prefix_depth_to_uniform_ratio_mean": 1.0004688501358032
+      },
+      "linear_state_final": {
+        "edge_amplitude_mean": 0.6772279739379883,
+        "edge_defect_norm_sq_normalized_mean": 0.0043154070153832436,
+        "edge_prefix_depth_to_uniform_ratio_mean": 0.9982763826847076,
+        "epoch": 5,
+        "test_iid_accuracy": 0.484375,
+        "test_iid_loss": 1.0531217654546101,
+        "test_ood_accuracy": 0.3333333333333333,
+        "test_ood_loss": 1.1021552085876465,
+        "train_accuracy": 0.4244791666666667,
+        "train_loss": 1.0717312097549438,
+        "val_iid_accuracy": 0.4635416666666667,
+        "val_iid_loss": 1.0595696767171223,
+        "val_ood_accuracy": 0.3333333333333333,
+        "val_ood_loss": 1.1053532361984253,
+        "wave_prefix_depth_to_uniform_ratio_mean": 1.0154682397842407
+      },
+      "report_path": ".test_artifacts\\step55_tree_balance_relation_3seed_2026-04-23\\seed_9\\tree_balance_relation_benchmark.json",
+      "seed": 9,
+      "splits_path": ".test_artifacts\\step55_tree_balance_relation_3seed_2026-04-23\\seed_9\\tree_balance_relation_splits.json",
+      "transformer_final": {
+        "edge_amplitude_mean": null,
+        "edge_defect_norm_sq_normalized_mean": null,
+        "edge_prefix_depth_to_uniform_ratio_mean": null,
+        "epoch": 5,
+        "test_iid_accuracy": 0.5208333333333334,
+        "test_iid_loss": 1.0247325499852498,
+        "test_ood_accuracy": 0.3385416666666667,
+        "test_ood_loss": 1.0969438155492146,
+        "train_accuracy": 0.4583333333333333,
+        "train_loss": 1.056545575459798,
+        "val_iid_accuracy": 0.515625,
+        "val_iid_loss": 1.0329397122065227,
+        "val_ood_accuracy": 0.328125,
+        "val_ood_loss": 1.1009478171666462,
+        "wave_prefix_depth_to_uniform_ratio_mean": null
+      }
+    }
+  ],
+  "seeds": [
+    7,
+    8,
+    9
+  ]
+}
