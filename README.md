@@ -3,6 +3,12 @@ pASCNN: an experimental research neural network architecture that uses sheaf-the
 
 disclaimer: pASCNN is the experimental variant of unusual neural network architecture, I maintain that the tests that were conducted were correct, but they may perhaps be somewhat less rigorous, reader can by himself check all code and make a correctness verdict ; This document prioritizes clarity over strict formality
 
+---
+
+This work was created while I was just learning and progressing (in writing documentation, design, some aspects in the code itself) in this area, which is why I used only AI in the code, now I am already working on https://github.com/kaifczxc-lab/OCSSN without using AI
+
+---
+
 My work is not SOTA, this arch is extremely new, but it produces results consistently higher than those presented to it by its opponents, the basic ViT-like transformer
 
 Most of the code was written using LLM (which can make the code difficult to read) under my complete control. The code was reviewed, but I could inevitably miss something. So, when talking about the correctness of the work done, I will refer to the correct test results and partially to the code, but it is obvious that the code cannot be without bugs and gaps (I would like to point out that LLM did not invent this architecture, did not invent the formula, but only implemented the architecture in code)
